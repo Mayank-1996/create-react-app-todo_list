@@ -50,7 +50,9 @@ export default function Homepage() {
     <div className="homepage">
       <div className="newTodos">
         <input onChange={(e) => handleChange(e)} value={inputVal} type="text" />
-        <button onClick={addTodo}>Add</button>
+        <button className="add-todo-button" onClick={addTodo}>
+          Add
+        </button>
         {todos &&
           todos.map((val) => (
             <Todo

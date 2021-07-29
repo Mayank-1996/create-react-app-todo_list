@@ -7,10 +7,16 @@
 .newTodos {
   width: 40vw;
   border: 1px solid gray;
+  padding: 1vh;
 }
 
 .completedTodos {
   width: 40vw;
   margin-left: 1vw;
   border: 1px solid gray;
+  padding: 1vh;
+}
+
+.add-todo-button {
+  margin-bottom: 2vh;
 }
