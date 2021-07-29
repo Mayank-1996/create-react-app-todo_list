@@ -3,9 +3,17 @@ import Todo from "../todo/todo";
 import "./homepage.css";
 
 export default function Homepage() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(
+    JSON.parse(localStorage.getItem("todos"))
+      ? JSON.parse(localStorage.getItem("todos"))
+      : []
+  );
   const [inputVal, setInputVal] = useState("");
-  const [completedTodos, setCompletedTodos] = useState([]);
+  const [completedTodos, setCompletedTodos] = useState(
+    JSON.parse(localStorage.getItem("completed-todos"))
+      ? JSON.parse(localStorage.getItem("completed-todos"))
+      : []
+  );
 
   function handleChange(e) {
     setInputVal(e.target.value);
@@ -16,6 +24,8 @@ export default function Homepage() {
       "todos",
       JSON.stringify([...todos, { val: inputVal, active: true }])
     );
+
+    console.log("Todos LS", JSON.parse(localStorage.getItem("todos")));
     setTodos(JSON.parse(localStorage.getItem("todos")));
     setInputVal("");
   }
