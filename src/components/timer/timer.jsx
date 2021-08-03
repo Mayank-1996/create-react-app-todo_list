@@ -37,11 +37,12 @@ export default function Timer({ endTodo, task }) {
 
   return (
     <div>
-      <h1>
+      <h1 data-testid="time-val">
         {minutes}m:{time}s
       </h1>
       {!timer && task.active ? (
         <button
+          data-testid="startButton"
           onClick={!timerStatus ? (e) => updateTimer(e) : () => {}}
           value="start"
         >

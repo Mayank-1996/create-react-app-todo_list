@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import Todo from "../todo/todo";
 import "./homepage.css";
+import { addToStorage, getFromStorage } from "../../localStorageHandler";
 
 export default function Homepage() {
   const [todos, setTodos] = useState(
-    JSON.parse(localStorage.getItem("todos"))
-      ? JSON.parse(localStorage.getItem("todos"))
-      : []
+    getFromStorage("todos") ? getFromStorage("todos") : []
   );
   const [inputVal, setInputVal] = useState("");
   const [completedTodos, setCompletedTodos] = useState(
-    JSON.parse(localStorage.getItem("completed-todos"))
-      ? JSON.parse(localStorage.getItem("completed-todos"))
-      : []
+    getFromStorage("completed-todos") ? getFromStorage("completed-todos") : []
   );
 
   function handleChange(e) {
@@ -20,43 +17,46 @@ export default function Homepage() {
   }
 
   function addTodo() {
-    localStorage.setItem(
-      "todos",
-      JSON.stringify([...todos, { val: inputVal, active: true }])
-    );
+    addToStorage("todos", [...todos, { val: inputVal, active: true }]);
 
-    console.log("Todos LS", JSON.parse(localStorage.getItem("todos")));
-    setTodos(JSON.parse(localStorage.getItem("todos")));
+    setTodos(getFromStorage("todos"));
     setInputVal("");
   }
 
   function completeTodo(v, m, s) {
     let newTodoList = todos.filter((state) => state.val !== v);
-    localStorage.setItem("todos", JSON.stringify(newTodoList));
+    addToStorage("todos", newTodoList);
+    console.log(todos);
+    setTodos(getFromStorage("todos"));
 
-    setTodos(JSON.parse(localStorage.getItem("todos")));
-
-    localStorage.setItem(
-      "completed-todos",
-      JSON.stringify([
-        ...completedTodos,
-        { val: v, active: false, time: `${m}mins ${s}secs elapsed` },
-      ])
-    );
-    setCompletedTodos(JSON.parse(localStorage.getItem("completed-todos")));
+    addToStorage("completed-todos", [
+      ...completedTodos,
+      { val: v, active: false, time: `${m}mins ${s}secs elapsed` },
+    ]);
+    setCompletedTodos(getFromStorage("completed-todos"));
   }
 
   return (
     <div className="homepage">
       <div className="newTodos">
-        <input onChange={(e) => handleChange(e)} value={inputVal} type="text" />
-        <button className="add-todo-button" onClick={addTodo}>
+        <input
+          data-testid="inputField"
+          onChange={(e) => handleChange(e)}
+          value={inputVal}
+          type="text"
+        />
+        <button
+          data-testid="add-todo-button"
+          className="add-todo-button"
+          onClick={addTodo}
+        >
           Add
         </button>
         {todos &&
-          todos.map((val) => (
+          todos.map((val, i) => (
             <Todo
-              key={val}
+              data-testid="active-todo"
+              key={i}
               task={val}
               complete={(v, m, s) => completeTodo(v, m, s)}
             />
@@ -64,8 +64,8 @@ export default function Homepage() {
       </div>
       <div className="completedTodos">
         <h1>Completed</h1>
-        {completedTodos.map((val) => (
-          <Todo key={val} task={val} />
+        {completedTodos.map((val, i) => (
+          <Todo key={i} task={val} />
         ))}
       </div>
     </div>
